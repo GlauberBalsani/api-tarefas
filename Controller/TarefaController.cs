@@ -74,6 +74,21 @@ namespace APITarefa.Controller
 
         }
 
+        [HttpGet("ObterPorStatus")]
+        public async Task<IActionResult> ObterPorStatus(EnumStatusTarefa status)
+        {
+            
+            var tarefas = await _context.Tarefas.Where(x => x.Status == status).ToListAsync();
+
+            if (tarefas == null || !tarefas.Any())
+            {
+                return NotFound("Nenhuma tarefa encontrada com o status fornecido.");
+            }
+
+            return Ok(tarefas);
+        }
+
+
         [HttpGet("ObterPorTitulo")]
         public async Task<IActionResult> ObterPorTitulo(string titulo)
         {
