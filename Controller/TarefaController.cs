@@ -77,7 +77,7 @@ namespace APITarefa.Controller
         [HttpGet("ObterPorStatus")]
         public async Task<IActionResult> ObterPorStatus(EnumStatusTarefa status)
         {
-            
+
             var tarefas = await _context.Tarefas.Where(x => x.Status == status).ToListAsync();
 
             if (tarefas == null || !tarefas.Any())
@@ -101,6 +101,38 @@ namespace APITarefa.Controller
 
             return Ok(tarefa);
         }
+
+        [HttpGet("ObterPorData")]
+        public async Task<IActionResult> ObterPorData(DateTime data)
+        {
+            var tarefas = await _context.Tarefas.Where(x => x.Data.Date == data.Date).ToListAsync();
+
+            if (tarefas == null || !tarefas.Any())
+            {
+                return NotFound("Nenhuma tarefa encontrada para a data fornecida.");
+            }
+
+            return Ok(tarefas);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Deletar(int id)
+        {
+            var tarefaBanco = _context.Tarefas.Find(id);
+
+            if (tarefaBanco == null)
+                return NotFound();
+
+            // Remover a tarefa encontrada através do EF
+            _context.Tarefas.Remove(tarefaBanco);
+
+            // Salvar as mudanças
+            _context.SaveChanges();
+
+            return NoContent();
+        }
+
+
 
 
 
